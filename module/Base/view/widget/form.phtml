@@ -1,0 +1,33 @@
+<div class="form-container">
+    <?php
+        $form = $this->form;
+        $form->prepare();
+        $params = array('action' => 'save');
+        
+        if (!empty($this->entity_id)) {
+            $params['id'] = $this->entity_id;
+        }
+        
+        $form->setAttribute('action', $this->url("{$this->controller}/wildcard", $params));
+        echo $this->form()->openTag($form); 
+    ?>
+    
+    <div class="row mb-3">
+        <div class="col-md-12 text-right">
+            <?php if (!empty($this->entity_id)): ?>
+                <a href="<?php echo $this->url("{$this->controller}/wildcard", array('action' => 'delete', 'id' => $this->entity_id)); ?>">
+                    <button class="btn btn-danger">Delete</button>
+                </a>
+            <?php endif; ?>
+            <button type="submit" class="btn btn-primary ml-2">Save</button>
+        </div>
+    </div>
+    
+    <?php
+        foreach ($form as $element) {
+            echo '<div class="form-element">' . $this->formRow($element) . '</div>';
+        }
+
+        echo $this->form()->closeTag($form); 
+    ?>
+</div>

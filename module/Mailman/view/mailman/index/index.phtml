@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">Contacts</h4>
+                <p class="card-text">Add, remove or update existing contacts. You can also import contacts from a CSV file here.</p>
+                <a href="<?php echo $this->url('contact'); ?>" title="Contacts listing" class="btn btn-primary mr-2">View All</a>
+                <a href="<?php echo $this->url('contact', array('action' => 'view')); ?>" title="Add new contacts" class="btn btn-primary mr-2">Add Contacts</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">Registers</h4>
+                <p class="card-text">Group your contacts into lists so they can be managed more easily.</p>
+                <a href="<?php echo $this->url('register'); ?>" title="View all registers" class="btn btn-primary mr-2">View All</a>
+                <a href="<?php echo $this->url('register', array('action' => 'view')); ?>" title="Create a new register" class="btn btn-primary mr-2">Create</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">Emails</h4>
+                <p class="card-text">Create and manage your existing email templates. This is what your contacts will see.</p>
+                <a href="<?php echo $this->url('email'); ?>" title="View all email templates" class="btn btn-primary mr-2">View All</a>
+                <a href="<?php echo $this->url('email', array('action' => 'view')); ?>" title="Create a email template" class="btn btn-primary mr-2">Create</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-block">
+            <h4 class="card-title">Variables</h4>
+            <p class="card-text">Add and manage constant variables which you can use in your emails.</p>
+            <a href="<?php echo $this->url('variable'); ?>" title="View all email variables" class="btn btn-primary mr-2">View All</a>
+                <a href="<?php echo $this->url('variable', array('action' => 'view')); ?>" title="Create a email variable" class="btn btn-primary mr-2">Create</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">Tasks</h4>
+                <p class="card-text">Schedule tasks which will send emails to your desired contacts.</p>
+                <a href="<?php echo $this->url('task'); ?>" title="View all tasks" class="btn btn-primary mr-2">View All</a>
+                <a href="<?php echo $this->url('task', array('action' => 'view')); ?>" title="Create a task" class="btn btn-primary mr-2">Schedule</a>
+            </div>
+        </div>
+    </div>
+</div>

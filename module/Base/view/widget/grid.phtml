@@ -1,0 +1,100 @@
+<?php use Base\Widget\EntityGrid; ?>
+<?php $totalPages = ceil($this->size/$this->limit); ?>
+
+<?php echo $this->partial('session/global-messages'); ?>
+
+<div class="row mb-4 small">
+    <div class="col-md-6">
+        <h4 class="float-left d-inline-block"><?php echo ucfirst($this->controller); ?>s</h4>
+    </div>
+    <div class="col-md-6 text-right">
+        <a class="float-right ml-3" href="<?php echo $this->url("{$this->controller}/wildcard", array('action' => 'view')); ?>">
+           <button role="button" type="button" class="btn btn-primary">Add <?php echo $this->controller; ?></button>
+        </a>
+        <form method="POST" action="<?php echo $this->url("{$this->controller}/wildcard", array_diff_key($this->params, array('search' => ''))); ?>">
+            <div class="input-group w-50 float-right">
+                <input name="search" type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" value="<?php echo $this->search; ?>"/>
+                <button type="submit" class="btn btn-primary input-group-addon" role="button"><i class="fa fa-search"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row small">
+    <?php if ($this->elements): ?>
+        <table class="table table-striped">
+            <thead>
+                <tr role="button">
+                    <?php foreach ($this->filters as $filter): ?>
+                        <?php $direction = ($this->orderBy == $filter && $this->direction == EntityGrid::DIRECTION_ASCENDING) ? EntityGrid::DIRECTION_DESCENDING : EntityGrid::DIRECTION_ASCENDING; ?>
+                        <th data-url="<?php echo $this->url("{$this->controller}/wildcard", array_merge($this->params, array('orderBy' => $filter, 'direction' => $direction))) ?>">
+                            <?php echo ucfirst($filter); ?>
+                            <?php if ($this->orderBy == $filter): ?>
+                                <i class="arrow-<?php echo strtolower($direction) ;?>">
+                                    <?php echo ($this->direction == EntityGrid::DIRECTION_ASCENDING) ? '&#x25B2;' : '&#x25BC;'; ?>
+                                </i>
+                            <?php endif; ?>
+                        </th>
+                    <?php endforeach; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->elements as $element): ?>
+                    <tr role="button" data-url="<?php echo $this->url("{$this->controller}/wildcard", array('action' => 'view', 'id' => $element['id'])); ?>">
+                        <?php foreach ($this->filters as $filter): ?>
+                            <td valign="middle">
+                                <?php
+                                    if ($element[$filter] instanceof DateTime) {
+                                        $element[$filter] = $element[$filter]->format('Y-m-d H:i:s');
+                                    }
+                                    
+                                    echo (array_key_exists($filter, $this->valueMaps))
+                                        ? $this->valueMaps[$filter][$element[$filter]]
+                                        : $element[$filter];
+                                ?>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <span class="text-center center-block ml-3">No <?php echo $this->baseHelper()->getPlural($this->controller); ?> were found.</span>
+    <?php endif; ?>
+</div>
+
+<div class="grid-pager">
+    <?php if ($totalPages > $this->visiblePages && $this->page > ceil($this->visiblePages/2)): ?>
+        <a href="<?php echo $this->url("{$this->controller}/wildcard", array_merge($this->params, array('page' => 1))); ?>"><<</a>
+        <a href="<?php echo $this->url("{$this->controller}/wildcard", array_merge($this->params, array('page' => $this->page - 1))); ?>"><</a>
+    <?php endif; ?>
+
+    <?php $index  = $this->startingPage; ?>
+    <?php if ($index != $this->endingPage): ?>
+        <?php while ($index <= $this->endingPage): ?>
+            <?php if ($index == $this->page): ?>
+                <span class="current-page"><?php echo $index++; ?></span>
+            <?php else: ?>
+                <a href="<?php echo $this->url("{$this->controller}/wildcard", array_merge($this->params, array('page' => $index))); ?>"><?php echo $index++; ?></a>
+            <?php endif; ?>
+        <?php endwhile; ?>
+    <?php endif; ?>
+
+    <?php if ($totalPages > $this->visiblePages && $this->page < $totalPages - floor($this->visiblePages/2)): ?>
+        <a href="<?php echo $this->url("{$this->controller}/wildcard", array_merge($this->params, array('page' => $this->page + 1))); ?>">></a>
+        <a href="<?php echo $this->url("{$this->controller}/wildcard", array_merge($this->params, array('page' => $totalPages))); ?>">>></a>
+    <?php endif; ?>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('[data-url]').on('mousedown', function(e) {
+            switch(e.which) {
+                case 1:
+                    window.location.href = $(this).data('url');
+                    break;
+                case 2:
+                    window.open($(this).data('url'), '_blank');
+                    break;
+            }
+        });
+    });
+</script>

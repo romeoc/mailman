@@ -1,0 +1,62 @@
+body {
+  font-family: 'Open Sans', sans-serif; }
+
+.nounderline, .nounderline:hover, .nounderline:focus {
+  text-decoration: none; }
+
+button, a {
+  cursor: pointer; }
+
+.btn-primary {
+  background-color: #474455;
+  border-color: #474455;
+  color: white; }
+
+.btn-primary:hover, .btn-outline-primary:hover {
+  background-color: #25232E;
+  border-color: #474455; }
+
+.btn-outline-primary {
+  color: #474455;
+  border-color: #474455; }
+
+header {
+  background-color: #474455;
+  margin-bottom: 40px; }
+
+.content {
+  margin: 0 40px; }
+
+.mnt-3 {
+  margin-top: -3px; }
+
+.login-page .error {
+  margin-bottom: 30px;
+  color: #e74c3c; }
+
+.contacts-view-page .custom-file-control:lang(en)::after {
+  content: "Upload CSV file.."; }
+.contacts-view-page .custom-file-control.selected:lang(en)::after {
+  content: "" !important; }
+
+.email-view-page .nice-box {
+  padding: 35px 35px 0 35px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.125);
+  text-align: center; }
+.email-view-page iframe {
+  background-color: white; }
+.email-view-page .fullscreen {
+  position: absolute;
+  left: 0;
+  top: 0; }
+.email-view-page iframe html, .email-view-page iframe body {
+  width: 100%;
+  height: 100%; }
+
+.register-view-page .add-all-contacts, .register-view-page .remove-all-contacts {
+  border-right: 1px solid #ccc;
+  border-radius: 5px !important; }
+
+/*# sourceMappingURL=style.css.map */

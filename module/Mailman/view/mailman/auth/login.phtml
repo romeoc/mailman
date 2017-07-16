@@ -1,0 +1,37 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath('css/bootstrap.min.css'); ?>">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath('css/style.css'); ?>">
+
+<div class="login-page">
+    <header class="text-center">
+        <img src="<?php echo $this->basePath('img/logo.png') ?>" alt="MailMan" height="100" />
+    </header>
+    <div class="box-content col-md-4 push-4">
+        <h3 class="text-center">Login</h3>
+        <?php if ($this->error): ?>
+            <p class="error text-center">
+                <small><?php echo $this->error; ?></small>
+            </p>
+        <?php endif; ?>
+        <?php
+            $form = $this->form;
+            $form->prepare();
+            $form->setAttribute('action', $this->url(NULL,
+                array('controller'=>'index', 'action' => 'authenticate')));
+            $form->setAttribute('method', 'post');
+            echo $this->form()->openTag($form);
+        ?>
+        <div class="fields">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <button type="submit" class="float-right btn btn-md btn-primary">Login</button>
+        </div>
+        <?php echo $this->form()->closeTag() ?>
+    </div>
+</div>

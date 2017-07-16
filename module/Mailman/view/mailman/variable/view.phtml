@@ -1,0 +1,31 @@
+<div class="variables-view-page">
+    <form method="POST" action="<?php echo $this->url('variable', array('action' => 'save')); ?>">
+        <div class="row mb-4">
+            <div class="col-md-6 float-left">
+                <h3 class="float-left">Manage Variables</h3>
+                <a class="float-left ml-3 mnt-3" href="<?php echo $this->url('variable'); ?>" title="View all variables">
+                    <button type="button" class="btn btn-outline-primary float-left">View all</button>
+                </a>
+            </div>
+            <div class="col-md-6 text-right">
+                <?php if (!empty($this->object->id)): ?>
+                    <a class="nounderline" href="<?php echo $this->url("variable/wildcard", array('action' => 'delete', 'id' => $this->object->id)); ?>">
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </a>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-primary ml-2">Save</button>
+            </div>
+        </div>
+        <input name="id" type="hidden" value="<?php echo $this->object->id; ?>" />
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="target">Target</label>
+                <input type="text" name="target" class="form-control" id="target" placeholder="Target" value="<?php echo $this->object->target; ?>" required />
+            </div>
+            <div class="col-6">
+                <label for="value">Value</label>
+                <input type="text" name="value" class="form-control" id="value" placeholder="Value" value="<?php echo $this->object->value; ?>" required />
+            </div>
+        </div>
+    </form>
+</div>

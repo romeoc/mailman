@@ -1,0 +1,68 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Expires" content="30" />
+        <meta name="robots" content="noindex, nofollow" />
+        
+        <title>Mailman</title>
+        
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+            ->appendStylesheet($this->basePath('css/bootstrap.min.css')) 
+            ->appendStylesheet($this->basePath('css/bootstrap-datepicker.min.css'))
+            ->appendStylesheet('https://fonts.googleapis.com/css?family=Open+Sans:400,700')
+            ->appendStylesheet('https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+            ->appendStylesheet($this->basePath('css/jquery-ui.min.css'))
+            ->appendStylesheet($this->basePath('css/codemirror.css'))
+            ->appendStylesheet($this->basePath('css/style.css'));
+        ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+            ->appendFile($this->basePath('js/html5shiv.min.js'), 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->appendFile($this->basePath('js/jquery.min.js'))
+            ->appendFile($this->basePath('js/handlebars.js'))
+            ->appendFile("https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js")
+            ->appendFile($this->basePath('js/bootstrap.min.js'))
+            ->appendFile($this->basePath('js/moment.min.js'))
+            ->appendFile($this->basePath('js/bootstrap-datepicker.min.js'))
+            ->appendFile($this->basePath('js/jquery-ui.min.js'))
+            ->appendFile($this->basePath('js/bootstrap-formhelpers.min.js'))
+            ->appendFile($this->basePath('js/codemirror.js'))
+            ->appendFile($this->basePath('js/bootbox.min.js'));
+        ?>
+    </head>
+    <body>
+        <header class="text-center">
+            <a href="<?php echo $this->url('home'); ?>" title="MailMan">
+                <img src="<?php echo $this->basePath('img/logo.png') ?>" alt="MailMan" height="100" />
+            </a>
+        </header>
+        <div class="content">
+            <?php echo $this->content; ?>
+        </div>
+        <script>
+            $('.btn-danger').on('click', function(e) {
+                var button = $(this);
+                e.preventDefault();
+                
+                bootbox.confirm({ 
+                    size: "small",
+                    message: "Are you sure?", 
+                    callback: function(result) { 
+                        if (result) {
+                            button.off('click').trigger('click');
+                        }
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

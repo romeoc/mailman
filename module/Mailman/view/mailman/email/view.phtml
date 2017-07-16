@@ -1,0 +1,122 @@
+<div class="email-view-page">
+    <form method="POST" action="<?php echo $this->url('email', array('action' => 'save')); ?>">
+        <div class="row mb-4">
+            <div class="col-md-6 float-left">
+                <h3 class="float-left">Manage Emails</h3>
+                <a class="float-left ml-3 mnt-3" href="<?php echo $this->url('email'); ?>" title="View all emails">
+                    <button type="button" class="btn btn-outline-primary float-left">View all</button>
+                </a>
+            </div>
+            <div class="col-md-6 text-right">
+                <?php if (!empty($this->object->id)): ?>
+                    <a class="nounderline" href="<?php echo $this->url("email/wildcard", array('action' => 'delete', 'id' => $this->object->id)); ?>">
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </a>
+                <?php endif; ?>
+                <button type="button" class="btn btn-warning ml-2">Test email</button>
+                <button type="submit" class="btn btn-primary ml-2" onclick="$(window).off('beforeunload');">Save</button>
+            </div>
+        </div>
+        <input name="id" type="hidden" value="<?php echo $this->object->id; ?>" />
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="title">Title</label>
+                <input type="text" name="title" class="form-control" id="title" placeholder="Title" value="<?php echo $this->object->title; ?>" required />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="subject">Subject</label>
+                <input type="text" name="subject" class="form-control" id="subject" placeholder="Subject" value="<?php echo $this->object->subject; ?>" required />
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6 form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" name="content" required><?php echo $this->object->content; ?></textarea>
+            </div>
+            <div class="col-6 form-group">
+                <div class='preview-actions'>
+                    <label>Preview</label>
+                    <div class="float-right">
+                        <button data-media='desktop' type="button" class="preview-mode btn btn-sm btn-primary" title="Desktop view">
+                            <i class="fa fa-desktop"></i>
+                        </button>
+                        <button data-media='tablet' type="button" class="preview-mode btn btn-sm btn-primary" title="Tablet view">
+                            <i class="fa fa-tablet"></i>
+                        </button>
+                        <button data-media='mobile' type="button" class="preview-mode btn btn-sm btn-outline-primary" title="Mobile view">
+                            <i class="fa fa-mobile"></i>
+                        </button>
+                        |
+                        <button type="button" class="btn btn-sm btn-warning flip-view" title="Flip View">
+                            <i class="fa fa-undo"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-warning refresh-preview" title="Refresh content">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="w-100 h-100 nice-box">
+                    <iframe class="border-0" width="320" height="480" id="preview" src="javascript:'';"><?php echo $this->object->content; ?></iframe>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $(window).on('beforeunload', function() {
+            if ($('#content').val() !== $('#content').text()) {
+                return 'Are you sure you want to leave?';
+            }
+        });
+        
+        var editor = CodeMirror.fromTextArea($('#content')[0], {
+            lineNumbers: true,
+            mode: "text/html",
+            indentUnit: 4,
+            extraKeys: {
+                "Ctrl-Space": "autocomplete",
+                "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
+                "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); }
+            }
+        });
+        
+        editor.on('change', editor.save);
+        
+        var screenResolutions = {
+            'desktop': {'width': 1366, 'height': 768},
+            'tablet': {'width': 768, 'height': 1024},
+            'mobile': {'width': 320, 'height': 480}
+        };
+        
+        $('.preview-mode').on('click', function() {
+            var element = $(this);
+            element.addClass('btn-outline-primary').removeClass('btn-primary')
+                .siblings('.preview-mode').removeClass('btn-outline-primary').addClass('btn-primary');
+        
+            var media = element.data('media');
+            $('iframe').attr('width', screenResolutions[media]['width'])
+                .attr('height', screenResolutions[media]['height']);
+        });
+        
+        $('.flip-view').on('click', function() {
+            var iframe = $('iframe');
+            var width = iframe.attr('width');
+            var height = iframe.attr('height');
+            iframe.attr('width', height);
+            iframe.attr('height', width);
+        });
+   
+        var variables = JSON.parse('<?php echo $this->variables; ?>');
+        $('.refresh-preview').on('click', function() {
+            var content = $('#content').val();
+            Object.keys(variables).forEach(function(target) {
+                content = content.replace(new RegExp(target, 'g'), variables[target]);
+            });
+            
+            $('#preview').contents().find('body').html(content);
+        }).trigger('click');
+    });
+</script>

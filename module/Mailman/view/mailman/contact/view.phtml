@@ -1,0 +1,126 @@
+<div class="contacts-view-page">
+    <div class="row mb-3">
+        <div class="col-md-6 float-left">
+            <h3 class="float-left">Manage Contacts</h3>
+            <a class="float-left ml-3 mnt-3" href="<?php echo $this->url('contact'); ?>" title="View all contacts">
+                <button type="button" class="btn btn-outline-primary float-left">View all</button>
+            </a>
+        </div>
+        <div class="col-md-6 text-right">
+            <?php if (!empty($this->object->id)): ?>
+                <a class="nounderline" href="<?php echo $this->url("contact/wildcard", array('action' => 'delete', 'id' => $this->object->id)); ?>">
+                    <button class="btn btn-danger">Delete</button>
+                </a>
+            <?php endif; ?>
+            <button type="button" class="btn btn-primary ml-2" onclick="$('.submit-single-contact-form').trigger('click');">Save</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#single" role="tab">Single Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#upload" role="tab">Upload CSV</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-12 tab-content mt-4 px-5">
+            <div class="tab-pane active" id="single" role="tabpanel">
+                <form method="POST" action="<?php echo $this->url('contact', array('action' => 'save')); ?>">
+                    <input name="id" type="hidden" value="<?php echo $this->object->id; ?>" />
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Email" value="<?php echo $this->object->email; ?>" required />
+                        </div>
+                        <div class="col-4">
+                            <label for="firstname">First Name</label>
+                            <input type="text" name="firstname" class="form-control" id="firstname" placeholder="First Name" value="<?php echo $this->object->firstname; ?>" />
+                        </div>
+                        <div class="col-4">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Last Name" value="<?php echo $this->object->lastname; ?>" />
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <label for="source">Source</label>
+                            <input type="text" name="source" class="form-control" id="source" placeholder="Source" value="<?php echo $this->object->source; ?>" required />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <a class="nounderline" data-toggle="collapse" href="#extra-fields" aria-expanded="false" aria-controls="extra-fields">
+                                <span class="collapsing-action">Show More &#x25BC;</span>
+                                <span class="collapsing-action collapse">Show Less &#x25B2;</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse mb-5" id="extra-fields">
+                        <hr />
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label for="country">Country</label>
+                                <select name="country" class="form-control bfh-countries" id="country" data-country="<?php echo $this->object->country; ?>"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="phone">Phone</label>
+                                <input name="phone" type="text" class="form-control bfh-phone" id="phone" placeholder="Phone Name" value="<?php echo $this->object->phone; ?>" data-country="<?php echo $this->object->country; ?>" />
+                            </div>
+                            <div class="col-4">
+                                <label for="city">City</label>
+                                <input name="city" type="text" class="form-control" id="city" placeholder="City" value="<?php echo $this->object->city; ?>" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label for="region">Region</label>
+                                <select name="region" class="form-control bfh-states" id="region" data-country="<?php echo $this->object->country; ?>" data-state="<?php echo $this->object->region; ?>"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="zipcode">Zip Code</label>
+                                <input name="zipcode" type="text" class="form-control" id="zipcode" placeholder="Zip Code" value="<?php echo $this->object->zipcode; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" class="submit-single-contact-form collapse" />
+                </form>
+            </div>
+            <div class="tab-pane" id="upload" role="tabpanel">
+                <form method="POST" action="<?php echo $this->url('contact', array('action' => 'import')); ?>" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-4 p-0">
+                            <label class="w-100" role="button">
+                                <input role="button" id="contacts-csv" name="filename" type="file" class="custom-file-input" />
+                                <span class="custom-file-control form-control-file"></span>
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary">Import</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('#country').on('change', function() {
+            var country = $(this).val();
+            $('#region').replaceWith($('#region').clone());
+            $('#region').bfhstates({country: country});
+            $('#phone').replaceWith($('#phone').clone().val(''));
+            $('#phone').bfhphone({country: country});
+        });
+
+        $('.collapsing-action').on('click', function() {
+            $(this).hide().siblings().show();
+        });
+        
+        $('.custom-file-input').on('change',function(){
+            $(this).next('.form-control-file').addClass("selected").html($(this).val().replace('C:\\fakepath\\', ''));
+        });
+    </script>
+</div>

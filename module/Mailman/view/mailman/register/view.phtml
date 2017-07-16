@@ -1,0 +1,181 @@
+<div class="register-view-page">
+    <form method="POST" action="<?php echo $this->url('register', array('action' => 'save')); ?>">
+        <div class="row mb-4">
+            <div class="col-md-9 float-left">
+                <h3 class="float-left">Manage Registers</h3>
+                <span class="float-left mt-1 ml-2">(<?php echo count($this->contacts); ?> contacts)</span>
+                <a class="float-left ml-3 mnt-3" href="<?php echo $this->url('register'); ?>" title="View all registers">
+                    <button type="button" class="btn btn-outline-primary float-left">View all</button>
+                </a>
+            </div>
+            <div class="col-md-3 text-right">
+                <?php if (!empty($this->object->id)): ?>
+                    <a class="nounderline" href="<?php echo $this->url("register/wildcard", array('action' => 'delete', 'id' => $this->object->id)); ?>">
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </a>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-primary ml-2">Save</button>
+            </div>
+        </div>
+        <input name="id" type="hidden" value="<?php echo $this->object->id; ?>" />
+        <input class="contacts-id-holder" name="contacts" type="hidden" value="<?php echo $this->object->contacts; ?>" />
+        <div class="row mb-5">
+            <div class="col-12">
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="<?php echo $this->object->name; ?>" required />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="name">Search contacts</label>
+                    
+                    <button type="button" class="btn btn-sm input-group-addon add-all-contacts ml-2 float-right">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                    
+                    <div class="input-group w-50 float-right">
+                        <input type="text" class="form-control form-control-sm search-available-field" placeholder="Search" />
+                        <button type="button" class="btn btn-sm input-group-addon search-available">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="search-contacts small">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr role="button">
+                                <th>Id</th>
+                                <th>Email</th>
+                                <th>First name</th>
+                                <th>Last name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="empty-table-message">
+                                <td colspan="4" class="text-center">Use the search box above</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="name">Selected contacts</label>
+                    
+                    <button type="button" class="btn btn-sm input-group-addon remove-all-contacts ml-2 float-right">
+                        <i class="fa fa-close"></i>
+                    </button>
+                    
+                    <div class="input-group w-50 float-right">
+                        <input type="text" class="form-control form-control-sm search-selected-field" placeholder="Search" />
+                        <button type="button" class="btn btn-sm input-group-addon search-selected">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="selected-contacts small">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr role="button">
+                                <th>Id</th>
+                                <th>Email</th>
+                                <th>First name</th>
+                                <th>Last name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="empty-table-message">
+                                <td colspan="4" class="text-center">No contacts have been selected yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function() {
+        var selectedContactIds = '<?php echo $this->object->contacts; ?>'.split(',').map(Number);
+        
+        var checkSelectedContactRows = function(target) {
+            if ($(target).find('tbody tr').size() > 1) {
+                $(target).find('.empty-table-message').hide();
+            } else {
+                $(target).find('.empty-table-message').show();
+            }
+        };
+        
+        var loadContacts = function(data, target) {
+            var contacts = {contacts: data};
+            var template = Handlebars.compile($('#contacts-row-template').html());
+            $(target).find('tbody').prepend(template(contacts));
+            checkSelectedContactRows(target);
+            
+            $('tbody tr:not(.empty-table-message)').off('click').on('click', function() {
+                var row = $(this);
+                row.closest('.col-6').siblings().find('tbody').prepend(row);
+                checkSelectedContactRows('.selected-contacts');
+                checkSelectedContactRows('.search-contacts');
+            });
+        };
+        
+        $('.search-available').on('click', function() {
+            var search = {search: $('.search-available-field').val()};
+            $.post('<?php echo $this->url('contact', array('action' => 'ajax')); ?>', search, function(response) {                
+                var data = JSON.parse(response.data);
+                data.forEach(function(contact, key) {
+                    if (selectedContactIds.indexOf(contact.id) !== -1) {
+                        delete data[key];
+                    } else {
+                        selectedContactIds.push(contact.id);
+                    }
+                });
+                
+                loadContacts(data, '.search-contacts');
+            });
+        });
+
+        $('.search-available-field, .search-selected-field').on('keypress', function (e) {
+            if (e.which === 13) {
+                $(this).siblings('button').trigger('click');
+                return false;
+            }
+        });
+        
+        $('.add-all-contacts').on('click', function() {
+            $('.selected-contacts tbody').prepend($('.search-contacts tbody tr:not(.empty-table-message)'));
+            checkSelectedContactRows('.selected-contacts');
+            checkSelectedContactRows('.search-contacts');
+        });
+        
+        $('.remove-all-contacts').on('click', function() {
+            $('.selected-contacts tbody tr:not(.empty-table-message)').remove();
+            $('.selected-contacts .empty-table-message').show();
+            selectedContactIds = [];
+        });
+        
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            
+            var collectedIds = $('.selected-contacts tbody tr:not(.empty-table-message)').map(function(){return this.id}).get().join(',');
+            $('.contacts-id-holder').val(collectedIds);
+            
+            $(this).off('submit').submit();
+        });
+        
+        loadContacts(JSON.parse('<?php echo json_encode($this->contacts); ?>'), '.selected-contacts');
+    });
+
+</script>
+<script id="contacts-row-template" type="templates/contact">
+    {{#each contacts}}
+        <tr id="{{id}}">
+            <td>{{id}}</td>
+            <td>{{email}}</td>
+            <td>{{firstname}}</td>
+            <td>{{lastname}}</td>
+        </tr>
+    {{/each}}
+</script>

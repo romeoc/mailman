@@ -1,0 +1,12 @@
+<?php use Base\Model\Session; ?>
+<div class="global-messages">
+    <?php $messages = ($this->global_messages) ? $this->global_messages : Session::getGlobalMessages(); ?>
+    <?php if ($messages): ?>
+        <?php foreach ($messages as $message): ?>
+            <div class="alert alert-<?php echo $message['class']; ?>" role="alert">
+                <strong><?php echo ucfirst($message['type']); ?>!</strong> <?php echo $message['message']; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <?php Session::clear(); ?>
+</div>

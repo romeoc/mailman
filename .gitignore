@@ -1,0 +1,7 @@
+/nbproject/
+/vendor/
+/public/media/
+/data/
+config/autoload/plugins.global.php
+errors.log
+composer.phar
