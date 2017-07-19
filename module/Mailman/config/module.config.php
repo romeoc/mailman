@@ -178,6 +178,19 @@ return array(
                     ),
                 )
             ),
+            'open' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/open[/:hash]',
+                    'constraints' => array(
+                        'action'     => '[a-zA-Z0-9_-%]*',
+                    ),
+                    'defaults' => array(
+                        'controller'    => 'Mailman\Controller\Email',
+                        'action'        => 'open',
+                    ),
+                )
+            ),
         ),
     ),
     'service_manager' => array(

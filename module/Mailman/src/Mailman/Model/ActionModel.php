@@ -45,7 +45,7 @@ class ActionModel extends AbstractModel
             );
             
             try {
-                $this->sendMail($contact, $template, $variables, $list->id);
+                $this->sendMail($contact, $template, $variables, $list->id, $task->id);
                 $action['status'] = \Mailman\Entity\Action::STATUS_DELIVERED;
                 $action['receivedAt'] = new \DateTime();
             } catch (\Exception $e) {
@@ -63,8 +63,9 @@ class ActionModel extends AbstractModel
      * @param Email $template
      * @param array(Variable) $variables
      * @param int $listId
+     * @param int $actionId
      */
-    public function sendMail($contact, $template, $variables = null, $listId = null)
+    public function sendMail($contact, $template, $variables = null, $listId = null, $taskId = null)
     {
         if (!$variables) {
             $variables = $this->getServiceLocator()->get('variable_model')->all();
@@ -80,6 +81,10 @@ class ActionModel extends AbstractModel
             $content = str_replace($key, $value, $content);
         }
         
+        if ($taskId) {
+            $content = $this->addTrackingPixel($content, $taskId, $contact->id);
+        }
+        
         $senderName = $this->getHelper()->getConfig('store_name');
         $senderEmail = $this->getHelper()->getConfig('store_email');
         
@@ -87,7 +92,7 @@ class ActionModel extends AbstractModel
         $html->type = "text/html";
         $body = new MimeMessage();
         $body->setParts(array($html));
-        
+        var_dump($html); die;
         $mail = new Message();
         $mail->setBody($body);
         $mail->setFrom($senderEmail, $senderName);
@@ -142,5 +147,38 @@ class ActionModel extends AbstractModel
             ->setParameters(array('status' => $status, 'task' => $task))
             ->getQuery()
             ->getSingleScalarResult();
+    }
+    
+    /**
+     * Add pixel tracking
+     * 
+     * @param string $content
+     * @param int $taskId
+     * @param int $contactId
+     * @return type
+     */
+    public function addTrackingPixel($content, $taskId, $contactId)
+    {
+        $url = $this->getHelper()->getConfig('domain')
+            . "open/" 
+            . urlencode($this->getHelper()->encrypt("{$taskId}-{$contactId}"));
+        
+        $pixel = "<img src='{$url}' />";
+        return str_replace('<body>', "<body>{$pixel}", $content);
+    }
+    
+    public function markAsRead($hash)
+    {
+        $data = $this->getServiceLocator()->get('helper')->decrypt(urldecode($hash));
+        list($taskId, $contactId) = explode('-', $data);
+        
+        if (is_numeric($taskId) && is_numeric($contactId)) {
+            $action = $this->getEntityManager()
+                ->getRepository($this->entity)
+                ->findOneBy(array('contact' => $contactId, 'task' => $taskId));
+            
+            $action->set('status', \Mailman\Entity\Action::STATUS_OPENED);
+            $this->getEntityManager()->flush();
+        }
     }
 }

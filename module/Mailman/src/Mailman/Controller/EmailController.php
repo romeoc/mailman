@@ -46,4 +46,17 @@ class EmailController extends AbstractController
         
         $this->redirect()->toRoute('email/wildcard', array('action' => 'view', 'id' => $id));
     }
+    
+    public function openAction()
+    {
+        $request = $this->getEvent()->getRouteMatch();
+        $hash = $request->getParam('hash');
+        $this->getServiceLocator()->get('action_model')->markAsRead($hash);
+        
+        $response = $this->getResponse();
+        $response->getHeaders()->addHeaderLine('Content-Type', 'image/png');
+        $response->setContent(base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='));
+        
+        return $response;
+    }
 }
