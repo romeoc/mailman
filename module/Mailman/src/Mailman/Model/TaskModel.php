@@ -53,8 +53,55 @@ class TaskModel extends AbstractModel
         }
     }
     
+    /**
+     * Send the emails
+     * @param Task $task
+     */
     public function processTask($task)
     {
-        echo 'Processing Task';
+        $actionModel = $this->getServiceLocator()->get('action_model');
+        $actionModel->process($task);
+        
+        $data = array('id' => $task->id, 'status' => \Mailman\Entity\Task::STATUS_FINISHED);
+        $this->update($data);
+    }
+    
+    /**
+     * Get progress information
+     * @param Task $task
+     * @return array
+     */
+    public function getStats($task)
+    {
+        $stats = array();
+        switch ($task->type) {
+            case (\Mailman\Entity\Task::TYPE_IMPORT):
+                $data = json_decode($task->encodedData, true);
+                $list = array('successful', 'duplicate', 'failed');
+                
+                foreach ($list as $stat) {
+                    if (array_key_exists($stat, $data)) {
+                        $stats[$stat] = $data[$stat];
+                    }
+                }
+
+                break;
+            case (\Mailman\Entity\Task::TYPE_MAILER):
+                $list = array(
+                    'ready' => \Mailman\Entity\Action::STATUS_READY,
+                    'delivered' => \Mailman\Entity\Action::STATUS_DELIVERED,
+                    'failed' => \Mailman\Entity\Action::STATUS_FAILED,
+                    'opened' => \Mailman\Entity\Action::STATUS_OPENED
+                );
+                
+                $model = $this->getServiceLocator()->get('action_model');
+                foreach ($list as $key => $status) {
+                    $stats[$key] = $model->getStatistic($task, $status);
+                }
+                
+                break;
+        }
+        
+        return $stats;
     }
 }

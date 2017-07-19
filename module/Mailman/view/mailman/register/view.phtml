@@ -3,7 +3,6 @@
         <div class="row mb-4">
             <div class="col-md-9 float-left">
                 <h3 class="float-left">Manage Registers</h3>
-                <span class="float-left mt-1 ml-2">(<?php echo count($this->contacts); ?> contacts)</span>
                 <a class="float-left ml-3 mnt-3" href="<?php echo $this->url('register'); ?>" title="View all registers">
                     <button type="button" class="btn btn-outline-primary float-left">View all</button>
                 </a>
@@ -25,72 +24,101 @@
                 <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="<?php echo $this->object->name; ?>" required />
             </div>
         </div>
-        <div class="row mb-3">
-            <div class="col-6">
-                <div class="mb-3">
-                    <label for="name">Search contacts</label>
-                    
-                    <button type="button" class="btn btn-sm input-group-addon add-all-contacts ml-2 float-right">
-                        <i class="fa fa-chevron-right"></i>
-                    </button>
-                    
-                    <div class="input-group w-50 float-right">
-                        <input type="text" class="form-control form-control-sm search-available-field" placeholder="Search" />
-                        <button type="button" class="btn btn-sm input-group-addon search-available">
-                            <i class="fa fa-search"></i>
+        <div class="col-md-12 mb-4">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#contacts" role="tab">Contacts (<?php echo count($this->contacts); ?>)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#unsubscribed" role="tab">Unsubscribed <?php if ($this->object->unsubscribed) { echo '(' . count(explode(',', $this->object->unsubscribed)) . ')'; } ?></a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div id="contacts" class="row mb-3 tab-pane active">
+                <div class="col-6 float-left">
+                    <div class="mb-3">
+                        <label for="name">Search contacts</label>
+
+                        <button type="button" class="btn btn-sm input-group-addon add-all-contacts ml-2 float-right">
+                            <i class="fa fa-chevron-right"></i>
                         </button>
+
+                        <div class="input-group w-50 float-right">
+                            <input type="text" class="form-control form-control-sm search-available-field" placeholder="Search" />
+                            <button type="button" class="btn btn-sm input-group-addon search-available">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="search-contacts small">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr role="button">
+                                    <th>Id</th>
+                                    <th>Email</th>
+                                    <th>First name</th>
+                                    <th>Last name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="empty-table-message">
+                                    <td colspan="4" class="text-center">Use the search box above</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="search-contacts small">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr role="button">
-                                <th>Id</th>
-                                <th>Email</th>
-                                <th>First name</th>
-                                <th>Last name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="empty-table-message">
-                                <td colspan="4" class="text-center">Use the search box above</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="col-6 float-right">
+                    <div class="mb-3">
+                        <label for="name">Selected contacts</label>
+
+                        <button type="button" class="btn btn-sm input-group-addon remove-all-contacts ml-2 float-right">
+                            <i class="fa fa-close"></i>
+                        </button>
+
+                        <div class="input-group w-50 float-right">
+                            <input type="text" class="form-control form-control-sm search-selected-field" placeholder="Search" />
+                            <button type="button" class="btn btn-sm input-group-addon search-selected">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="selected-contacts small">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr role="button">
+                                    <th>Id</th>
+                                    <th>Email</th>
+                                    <th>First name</th>
+                                    <th>Last name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="empty-table-message">
+                                    <td colspan="4" class="text-center">No contacts have been selected yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="mb-3">
-                    <label for="name">Selected contacts</label>
-                    
-                    <button type="button" class="btn btn-sm input-group-addon remove-all-contacts ml-2 float-right">
-                        <i class="fa fa-close"></i>
-                    </button>
-                    
-                    <div class="input-group w-50 float-right">
-                        <input type="text" class="form-control form-control-sm search-selected-field" placeholder="Search" />
-                        <button type="button" class="btn btn-sm input-group-addon search-selected">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="selected-contacts small">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr role="button">
-                                <th>Id</th>
-                                <th>Email</th>
-                                <th>First name</th>
-                                <th>Last name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="empty-table-message">
-                                <td colspan="4" class="text-center">No contacts have been selected yet</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div id="unsubscribed" class="col-12 tab-pane" role="tabpanel">
+                <table class="table table-striped small">
+                    <thead>
+                        <tr role="button">
+                            <th>Id</th>
+                            <th>Email</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="empty-table-message">
+                            <td colspan="4" class="text-center">No contacts unsubscribed from this list.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </form>
@@ -166,6 +194,7 @@
         });
         
         loadContacts(JSON.parse('<?php echo json_encode($this->contacts); ?>'), '.selected-contacts');
+        loadContacts(JSON.parse('<?php echo json_encode($this->unsubscribed); ?>'), '#unsubscribed');
     });
 
 </script>

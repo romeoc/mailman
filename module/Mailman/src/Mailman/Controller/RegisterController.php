@@ -17,13 +17,25 @@ class RegisterController extends AbstractController
         $model = $this->getServiceLocator()->get('register_model');
         $object = $model->load($id);
         $contacts = $model->getContacts($object);
+        $unsubscribed = $model->getUnsubscribed($object);
 
         $view = new ViewModel();
         $view->setVariables(array(
             'object' => $object, 
-            'contacts' => $contacts
+            'contacts' => $contacts,
+            'unsubscribed' => $unsubscribed
         ));
         
         return $view;
+    }
+    
+    public function unsubscribeAction()
+    {
+        $request = $this->getEvent()->getRouteMatch();
+        $hash = $request->getParam('hash');
+        
+        $this->getServiceLocator()->get('register_model')->unsubscribe($hash);
+        $domain = $this->getServiceLocator()->get('helper')->getConfig('store_url');
+        return $this->redirect()->toUrl($domain);
     }
 }

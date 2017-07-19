@@ -111,6 +111,16 @@ class Module
                     $model->setServiceLocator($sm);
                     return $model;
                 },
+                'action_model' => function(ServiceLocatorInterface $sm) {
+                    $model = new \Mailman\Model\ActionModel();
+                    $model->setServiceLocator($sm);
+                    return $model;
+                },
+                'helper' => function(ServiceLocatorInterface $sm) {
+                    $helper = new \Mailman\Helper\Base();
+                    $helper->setServiceLocator($sm);
+                    return $helper;
+                }
             ),
         );
     }

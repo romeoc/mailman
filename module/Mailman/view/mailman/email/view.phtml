@@ -1,4 +1,7 @@
 <div class="email-view-page">
+    <div class="mb-4">
+        <?php echo $this->partial('session/global-messages'); ?>
+    </div>
     <form method="POST" action="<?php echo $this->url('email', array('action' => 'save')); ?>">
         <div class="row mb-4">
             <div class="col-md-6 float-left">
@@ -13,7 +16,9 @@
                         <button type="button" class="btn btn-danger">Delete</button>
                     </a>
                 <?php endif; ?>
-                <button type="button" class="btn btn-warning ml-2">Test email</button>
+                <a href="<?php echo $this->url('email/wildcard', array('action' => 'sendTest', 'id' => $this->object->id)); ?>" title="Send a test email">
+                    <button type="button" class="btn btn-warning ml-2">Test email</button>
+                </a>
                 <button type="submit" class="btn btn-primary ml-2" onclick="$(window).off('beforeunload');">Save</button>
             </div>
         </div>

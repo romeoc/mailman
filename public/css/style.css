@@ -20,15 +20,18 @@ button, a {
   color: #474455;
   border-color: #474455; }
 
+.m-auto {
+  margin: 0 auto; }
+
+.mnt-3 {
+  margin-top: -3px; }
+
 header {
   background-color: #474455;
   margin-bottom: 40px; }
 
 .content {
   margin: 0 40px; }
-
-.mnt-3 {
-  margin-top: -3px; }
 
 .login-page .error {
   margin-bottom: 30px;

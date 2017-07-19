@@ -8,10 +8,11 @@ button, a { cursor: pointer; }
 .btn-primary { background-color: $main-color; border-color: $main-color; color: white; }
 .btn-primary:hover, .btn-outline-primary:hover { background-color: $main-color-complement; border-color: $main-color; }
 .btn-outline-primary { color: $main-color; border-color: $main-color; }
+.m-auto { margin: 0 auto; }
+.mnt-3 { margin-top: -3px; }
 
 header { background-color: $main-color; margin-bottom: 40px; }
 .content { margin: 0 40px; }
-.mnt-3 { margin-top: -3px; }
 
 .login-page 
 {

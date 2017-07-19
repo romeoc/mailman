@@ -27,6 +27,9 @@ class Register extends AbstractEntity
     /** @ORM\Column(type="text", length=134217728, nullable=true) */
     protected $contacts;
     
+    /** @ORM\Column(type="text", length=134217728, nullable=true) */
+    protected $unsubscribed;
+    
     public function beforeCreate()
     {
         if (is_null($this->get('createdAt'))) {

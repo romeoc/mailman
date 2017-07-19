@@ -62,6 +62,21 @@
                 </div>
             <?php endif; ?>
         </div>
+        <?php if (!empty($this->stats)): ?>
+            <div class="row mb-4 text-center">
+                <?php $columns = 12 / count($this->stats); ?>
+                <?php foreach ($this->stats as $key => $value): ?>
+                    <div class="col-<?php echo $columns; ?>">
+                        <div class="px-5 card">
+                            <div class="card-block">
+                                <h2><?php echo $value; ?></h2>
+                                <span><small><?php echo ucfirst($key); ?></small></span>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
         <?php if ($this->object->id): ?>
             <div class="row mb-5">
                 <div class="col-12">

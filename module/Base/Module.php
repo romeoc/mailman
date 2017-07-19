@@ -30,22 +30,4 @@ class Module implements AutoloaderProviderInterface
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
     }
-    
-    public function getServiceConfig()
-    { 
-        return array(
-            'factories' => array(
-                'Base\Helper\Config' =>  function(ServiceLocatorInterface $sm) {
-                    $helper = new Base\Helper\Config();
-                    $helper->setServiceLocator($sm);
-                    return $helper;
-                },
-                'Base\Helper\Base' =>  function(ServiceLocatorInterface $sm) {
-                    $helper = new Base\Helper\Base();
-                    $helper->setServiceLocator($sm);
-                    return $helper;
-                }
-            ),
-        );
-    }
 }

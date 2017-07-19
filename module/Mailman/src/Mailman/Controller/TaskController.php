@@ -29,12 +29,15 @@ class TaskController extends AbstractController
     {
         $request = $this->getEvent()->getRouteMatch();
         $id = $request->getParam('id');
+        $model = $this->getServiceLocator()->get('task_model');
+        $task = $model->load($id);
         
         $view = new ViewModel();
         $view->setVariables(array(
-            'object' => $this->getServiceLocator()->get('task_model')->load($id), 
+            'object' => $task, 
             'emails' => $this->getServiceLocator()->get('email_model')->all(),
-            'lists' => $this->getServiceLocator()->get('register_model')->all()
+            'lists' => $this->getServiceLocator()->get('register_model')->all(),
+            'stats' => $model->getStats($task)
         ));
         
         return $view;

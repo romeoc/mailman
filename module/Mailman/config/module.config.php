@@ -165,6 +165,19 @@ return array(
                     ),
                 ),
             ),
+            'unsubscribe' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/unsubscribe[/:hash]',
+                    'constraints' => array(
+                        'action'     => '[a-zA-Z0-9_-%]*',
+                    ),
+                    'defaults' => array(
+                        'controller'    => 'Mailman\Controller\Register',
+                        'action'        => 'unsubscribe',
+                    ),
+                )
+            ),
         ),
     ),
     'service_manager' => array(
