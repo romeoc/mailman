@@ -16,6 +16,10 @@ class Module
         $application = $e->getApplication();
         $eventManager = $application->getEventManager();
         
+        $entityManager = $application->getServiceManager()->get('Doctrine\ORM\EntityManager');
+        $platform = $entityManager->getConnection()->getDatabasePlatform();
+        $platform->registerDoctrineTypeMapping('enum', 'string');
+        
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkIfAuthenticated'));
         $config = $e->getApplication()
             ->getServiceManager()

@@ -92,7 +92,7 @@ class ActionModel extends AbstractModel
         $html->type = "text/html";
         $body = new MimeMessage();
         $body->setParts(array($html));
-        var_dump($html); die;
+        
         $mail = new Message();
         $mail->setBody($body);
         $mail->setFrom($senderEmail, $senderName);
