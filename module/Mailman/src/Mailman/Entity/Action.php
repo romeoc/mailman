@@ -8,7 +8,7 @@ use Base\Entity\AbstractEntity;
 
 /** 
  * @ORM\Entity 
- * @ORM\Table(name="action", uniqueConstraints={@UniqueConstraint(name="unique_task_contact_action", columns={"contact_id", "task_id"})})
+ * @ORM\Table(name="mailman_action", uniqueConstraints={@UniqueConstraint(name="unique_task_contact_action", columns={"contact_id", "task_id"})})
  */
 class Action extends AbstractEntity
 {

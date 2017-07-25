@@ -7,7 +7,7 @@ use Base\Entity\AbstractEntity;
 
 /** 
  * @ORM\Entity 
- * @ORM\Table(name="variable")
+ * @ORM\Table(name="mailman_variable")
  */
 class Variable extends AbstractEntity
 {

@@ -7,7 +7,7 @@ use Base\Entity\AbstractEntity;
 
 /** 
  * @ORM\Entity 
- * @ORM\Table(name="register")
+ * @ORM\Table(name="mailman_register")
  */
 class Register extends AbstractEntity
 {
