@@ -164,7 +164,9 @@ class ActionModel extends AbstractModel
             . urlencode($this->getHelper()->encrypt("{$taskId}-{$contactId}"));
         
         $pixel = "<img src='{$url}' />";
-        return str_replace('<body>', "<body>{$pixel}", $content);
+        $parts = preg_split('/(<body.*?>)/i', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+        return $parts[0] . $parts[1] . $pixel . $parts[2];
     }
     
     public function markAsRead($hash)
