@@ -89,9 +89,14 @@ class ActionModel extends AbstractModel
         $senderEmail = $this->getHelper()->getConfig('store_email');
         
         $html = new MimePart($content);
-        $html->type = "text/html";
+        $html->type = 'text/html';
+        
+        $plainContent = \Html2Text\Html2Text::convert($content);
+        $plain = new MimePart(\Html2Text\Html2Text::convert($plainContent));
+        $plain->type = 'text/plain';
+        
         $body = new MimeMessage();
-        $body->setParts(array($html));
+        $body->setParts(array($html, $plain));
         
         $mail = new Message();
         $mail->setBody($body);
