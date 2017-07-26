@@ -96,13 +96,15 @@ class ActionModel extends AbstractModel
         $plain->type = 'text/plain';
         
         $body = new MimeMessage();
-        $body->setParts(array($html, $plain));
+        $body->setParts(array($plain, $html));
         
         $mail = new Message();
         $mail->setBody($body);
         $mail->setFrom($senderEmail, $senderName);
         $mail->addTo($contact->email);
         $mail->setSubject($template->subject);
+        $mail->setEncoding("UTF-8");
+        $mail->getHeaders()->get('content-type')->setType('multipart/alternative');
         
         $transport = new Sendmail();
         $transport->send($mail);
