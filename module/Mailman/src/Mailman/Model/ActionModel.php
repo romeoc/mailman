@@ -169,10 +169,9 @@ class ActionModel extends AbstractModel
     {
         $url = $this->getHelper()->getConfig('domain')
             . "open/" 
-            . $this->getHelper()->encrypt("{$taskId}-{$contactId}");
+            . base64_encode($this->getHelper()->encrypt("{$taskId}-{$contactId}"));
         
-        $url64 = base64_encode($url);
-        $pixel = "<img src='{$url64}' />";
+        $pixel = "<img src='{$url}' />";
         $parts = preg_split('/(<body.*?>)/i', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
         return $parts[0] . $parts[1] . $pixel . $parts[2];

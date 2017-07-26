@@ -351,14 +351,4 @@ class AbstractModel implements ServiceLocatorAwareInterface
         $model->setServiceLocator($this->getServiceLocator());
         return $model;
     }
-    
-    public function getHelper($name)
-    {
-        $name = ucfirst($name);
-        $class = "{$name}Helper";
-        $helper = new $class();
-
-        $helper->updateServiceLocator($this->getServiceLocator());
-        return $helper;
-    }
 }
