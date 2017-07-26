@@ -51,7 +51,7 @@ class RegisterModel extends AbstractModel
     
     public function unsubscribe($hash)
     {
-        $data = $this->getServiceLocator()->get('helper')->decrypt(urldecode($hash));
+        $data = $this->getServiceLocator()->get('helper')->decrypt($hash);
         list($listId, $contactId) = explode('-', $data);
         
         if (is_numeric($listId) && is_numeric($contactId)) {

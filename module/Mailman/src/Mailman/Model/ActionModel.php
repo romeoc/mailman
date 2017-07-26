@@ -179,7 +179,7 @@ class ActionModel extends AbstractModel
     
     public function markAsRead($hash)
     {
-        $data = $this->getServiceLocator()->get('helper')->decrypt(urldecode($hash));
+        $data = $this->getServiceLocator()->get('helper')->decrypt($hash);
         list($taskId, $contactId) = explode('-', $data);
         
         if (is_numeric($taskId) && is_numeric($contactId)) {
