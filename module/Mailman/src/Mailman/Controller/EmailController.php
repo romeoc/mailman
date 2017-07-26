@@ -50,7 +50,8 @@ class EmailController extends AbstractController
     public function openAction()
     {
         $request = $this->getEvent()->getRouteMatch();
-        $hash = $request->getParam('hash');
+        $hash64 = $request->getParam('hash');
+        $hash = base64_decode($hash64);
         $this->getServiceLocator()->get('action_model')->markAsRead($hash);
         
         $response = $this->getResponse();

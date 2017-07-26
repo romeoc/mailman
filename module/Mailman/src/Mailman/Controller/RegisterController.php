@@ -32,7 +32,8 @@ class RegisterController extends AbstractController
     public function unsubscribeAction()
     {
         $request = $this->getEvent()->getRouteMatch();
-        $hash = $request->getParam('hash');
+        $hash64 = $request->getParam('hash');
+        $hash = base64_decode($hash64);
         
         $this->getServiceLocator()->get('register_model')->unsubscribe($hash);
         $domain = $this->getServiceLocator()->get('helper')->getConfig('store_url');

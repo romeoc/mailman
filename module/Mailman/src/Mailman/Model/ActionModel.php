@@ -119,8 +119,9 @@ class ActionModel extends AbstractModel
      */
     public function getGlobalVairables($contact, $listId)
     {
-        $hash = urlencode($this->getHelper()->encrypt($listId . '-' . $contact->id));
-        $url = $this->getHelper()->getConfig('domain') . "unsubscribe/{$hash}";
+        $hash = $this->getHelper()->encrypt($listId . '-' . $contact->id);
+        $hash64 = base64_encode($hash);
+        $url = $this->getHelper()->getConfig('domain') . "unsubscribe/{$hash64}";
         
         return array(
             '[[unsubscribe_url]]' => $url,
@@ -168,9 +169,10 @@ class ActionModel extends AbstractModel
     {
         $url = $this->getHelper()->getConfig('domain')
             . "open/" 
-            . urlencode($this->getHelper()->encrypt("{$taskId}-{$contactId}"));
+            . $this->getHelper()->encrypt("{$taskId}-{$contactId}");
         
-        $pixel = "<img src='{$url}' />";
+        $url64 = base64_encode($url);
+        $pixel = "<img src='{$url64}' />";
         $parts = preg_split('/(<body.*?>)/i', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
         return $parts[0] . $parts[1] . $pixel . $parts[2];

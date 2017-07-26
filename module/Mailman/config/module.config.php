@@ -170,7 +170,7 @@ return array(
                 'options' => array(
                     'route'    => '/unsubscribe[/:hash]',
                     'constraints' => array(
-                        'action'     => '[a-zA-Z0-9_-%]*',
+                        'action'     => '[a-zA-Z0-9_-]*',
                     ),
                     'defaults' => array(
                         'controller'    => 'Mailman\Controller\Register',
@@ -183,7 +183,7 @@ return array(
                 'options' => array(
                     'route'    => '/open[/:hash]',
                     'constraints' => array(
-                        'action'     => '[a-zA-Z0-9_-%]*',
+                        'action'     => '[a-zA-Z0-9_-]*',
                     ),
                     'defaults' => array(
                         'controller'    => 'Mailman\Controller\Email',
