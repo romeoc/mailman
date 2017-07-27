@@ -13,7 +13,7 @@ class TaskModel extends AbstractModel
     
     public function save($data)
     {
-        if ($data['scheduledAt']) {
+        if ($data['scheduledAt'] && !is_object($data['scheduledAt'])) {
             $data['scheduledAt'] = date_create_from_format('Y-m-d H:i:s', $data['scheduledAt']);
         }
         
