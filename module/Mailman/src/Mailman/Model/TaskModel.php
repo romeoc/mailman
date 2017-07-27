@@ -77,6 +77,11 @@ class TaskModel extends AbstractModel
         switch ($task->type) {
             case (\Mailman\Entity\Task::TYPE_IMPORT):
                 $data = json_decode($task->encodedData, true);
+                
+                if (empty($data)) {
+                    return array();
+                }
+                
                 $list = array('successful', 'duplicate', 'failed');
                 
                 foreach ($list as $stat) {
