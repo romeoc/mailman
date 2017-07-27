@@ -21,7 +21,7 @@ class ContactController extends AbstractController
         
         $taskModel->save(array(
             'name' => "Contacts Import {$now}",
-            'data' => $now . '.csv',
+            'encodedData' => $now . '.csv',
             'type' => \Mailman\Entity\Task::TYPE_IMPORT,
             'status' => \Mailman\Entity\Task::STATUS_SCHEDULED,
             'scheduledAt' => $date
