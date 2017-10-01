@@ -48,7 +48,7 @@ Variables
 Variables can be used anywhere in your email templates. This can go from links to URLs all the way to full HTML headers that can be reused. Get creative!
 
 
-![Variables](/screenshots/variables.png?raw=true "Variables")
+![Variables](/screenshots/variables.png2?raw=true "Variables")
 
 Sending Emails
 --------------
